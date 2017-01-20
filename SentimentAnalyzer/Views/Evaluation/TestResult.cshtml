@@ -1,0 +1,41 @@
+﻿@model SentimentAnalyzer.Models.TestResult
+
+@{
+    ViewBag.Title = "Test Result";
+}
+
+<h2>Test Result</h2>
+<a href='@Url.Action("TestResultDetails", "Evaluation")?TestID=@ViewBag.TestID'><h4>Click Here to View Details</h4></a>
+<table id="ResultTable" class="display cell-border compact stripe">
+    <thead>
+        <tr>
+            <th>Classifier</th>
+            <th>Precision</th>
+            <th>Recall</th>
+            <th>Accuracy</th>
+        </tr>
+    </thead>
+    <tbody></tbody>
+</table>
+<script>
+    var result = @Html.Raw(Json.Encode(Model))
+    console.log(result);
+    var dataSet = [];
+    for (var i = 0; i < result.classifiers.length; i++)
+    {
+        var data = [];
+        data.push(result.classifiers[i]);
+        data.push(result.precisions[i]);
+        data.push(result.recalls[i]);
+        data.push(result.accuracies[i]+"%");
+        dataSet.push(data);
+
+    }
+
+
+    $('#ResultTable').DataTable({
+        data:dataSet,
+    });
+
+</script>
+

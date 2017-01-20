@@ -1,0 +1,39 @@
+﻿@model SentimentAnalyzer.Models.TestHistoryModel[]
+
+@{
+    ViewBag.Title = "TestHistory";
+}
+
+<h2>TestHistory</h2>
+<table id="ResultTable" class="display cell-border compact stripe">
+    <thead>
+        <tr>
+            <th>TestID</th>
+            <th>Classifiers Used</th>
+            <th>Testset Size</th>
+            <th>Result</th>
+        </tr>
+    </thead>
+    <tbody></tbody>
+</table>
+<script>
+    var result = @Html.Raw(Json.Encode(Model))
+    console.log(result);
+    var dataSet = [];
+    for (var i = 0; i < result.length; i++) {
+        var data = [];
+        data.push(result[i].TestID);
+        data.push(result[i].classifiersUsed);
+        data.push(result[i].TestSetSize);
+        data.push("<a href='@Url.Action("TestResult", "Evaluation")?TestID=" + result[i].TestID + "'>Result</a>");
+        dataSet.push(data);
+
+    }
+
+
+    $('#ResultTable').DataTable({
+        data: dataSet,
+        
+    });
+
+</script>

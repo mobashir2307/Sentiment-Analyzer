@@ -1,0 +1,111 @@
+﻿@model SentimentAnalyzer.Models.TrainingParameterModel
+
+@{
+    ViewBag.Title = "Train";
+}
+
+<h2>Train</h2>
+
+@using (Html.BeginForm("Train", "Evaluation", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <h4>Training Parameters</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.LabelFor(model => model.classifierName,"Classifier Name", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.classifierName, new { htmlAttributes = new { @class = "form-control", required = "required",placeholder="Enter an unique classifier name" } })
+                @Html.ValidationMessageFor(model => model.classifierName, "", new { @class = "text-danger" })
+                <p><font color="#b30000">@ViewBag.errMsg</font></p>
+            </div>
+        </div>
+        <div class="form-group">
+            @{
+                List<SelectListItem> listItems = new List<SelectListItem>();
+                listItems.Add(new SelectListItem
+                {
+                    Text = "Categorical Proportional Difference",
+                    Value = "CPD"
+                });
+                listItems.Add(new SelectListItem
+                {
+                    Text = "Chi Squared Value",
+                    Value = "chi",
+
+                });
+            }
+            @Html.LabelFor(model => model.ChiOrCPD,"N-grams Selection Method", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.ChiOrCPD, listItems, "-- Select--", new { @class = "form-control", align = "center", required = "required" })
+                @Html.ValidationMessageFor(model => model.ChiOrCPD, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.NumberOfNgrams,"Maximum Number of N-grams to Select", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.NumberOfNgrams, new { htmlAttributes = new { @class = "form-control", required = "required", placeholder = "Maximum number of n-grams to select" } })
+                @Html.ValidationMessageFor(model => model.NumberOfNgrams, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.ngramFilterThreshold,"Minimum Occurances of N-gram for Selection", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.ngramFilterThreshold, new { htmlAttributes = new { @class = "form-control", required = "required", placeholder = "Minimum number of presence n-gram" } })
+                @Html.ValidationMessageFor(model => model.ngramFilterThreshold, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            @{
+                listItems = new List<SelectListItem>();
+                listItems.Add(new SelectListItem
+                {
+                    Text = "SVM - Radial Base Kernel",
+                    Value = "SVMRadial"
+                });
+                listItems.Add(new SelectListItem
+                {
+                    Text = "SVM - Sigmoid Kernel",
+                    Value = "SVMSigmoid"
+
+                });
+                listItems.Add(new SelectListItem
+                {
+                    Text = "SVM - Polynomial Kernel",
+                    Value = "SVMPolynomial"
+                });
+                listItems.Add(new SelectListItem
+                {
+                    Text = "Adaboost",
+                    Value = "adaboost"
+
+                });
+            }
+            @Html.LabelFor(model => model.ChoesenModel, "Model",htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.ChoesenModel, listItems, "-- Select--", new { @class = "form-control", align = "center", required = "required" })
+                @Html.ValidationMessageFor(model => model.ChoesenModel, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.TrainingFile, "Training File", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextBoxFor(model => model.TrainingFile, new { type = "file", name = "TrainingFile", id = "TrainingFile", @class = "btn btn-default", required = "required" })
+                <p>Please enter a CSV file in format: "TweetID,Sentiment,Text"</p>
+                <p><font color="#b30000">@ViewBag.fileErrMsg</font></p>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" id="train"  value="Train" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+}
+
+

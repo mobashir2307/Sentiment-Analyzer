@@ -1,0 +1,70 @@
+﻿@model SentimentAnalyzer.Models.RequestParametersModel
+
+@{
+    ViewBag.Title = "Home";
+}
+
+<h2>Analyze Tweet Sentiment</h2>
+
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <h4>Analysis Parameters</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.LabelFor(model => model.Keyword, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Keyword, new { htmlAttributes = new { @class = "form-control" ,placeholder="Enter a keyword to crawl tweets about",required="required"} })
+                @Html.ValidationMessageFor(model => model.Keyword, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.RequestedNumber,"Number of Tweets to Crawl", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.RequestedNumber, new { htmlAttributes = new { @class = "form-control", placeholder = "Enter the number of tweets to crawl", required = "required",id="number" } })
+                @Html.ValidationMessageFor(model => model.RequestedNumber, "", new { @class = "text-danger",id="numberValidation" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @{
+    List<SelectListItem> listItems = new List<SelectListItem>();
+    listItems.Add(new SelectListItem
+    {
+        Text = "Live Tweets",
+        Value = "stream"
+    });
+    listItems.Add(new SelectListItem
+    {
+        Text = "Past Tweets",
+        Value = "search",
+
+    });
+            }
+            @Html.LabelFor(model => model.SearchFor, "Live Or Old Tweets",htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.SearchFor, listItems, "-- Select --", new { @class = "form-control", align = "center", required = "required" })
+                @Html.ValidationMessageFor(model => model.SearchFor, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" id="analyze" value="Analyze" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+}
+
+<script>
+
+    
+</script>
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

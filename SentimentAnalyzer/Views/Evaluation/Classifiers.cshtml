@@ -1,0 +1,41 @@
+﻿@model SentimentAnalyzer.Models.Classifier[]
+
+@{
+    ViewBag.Title = "Classifiers";
+}
+
+<h2>Classifiers</h2>
+<table id="ResultTable" class="display cell-border compact stripe">
+    <thead>
+        <tr>
+            <th>Classifier</th>
+            <th>Type</th>
+            <th>Location</th>
+            <th>Ngram Selection Method</th>
+            <th>Delete</th>
+        </tr>
+    </thead>
+    <tbody></tbody>
+</table>
+<script>
+    var result = @Html.Raw(Json.Encode(Model))
+    console.log(result);
+    var dataSet = [];
+    for (var i = 0; i < result.length; i++) {
+        var data = [];
+        data.push(result[i].classifierName);
+        data.push(result[i].Type);
+        data.push(result[i].Location);
+        if (result[i].NgramSelectionMethod == "chi") data.push("Chi Squared");
+        else data.push("Categorical Proportional Difference");
+        data.push("<a href='@Url.Action("DeleteClassifier","Evaluation")?ClassifierName=" + result[i].classifierName + "'>Delete</a>");
+        dataSet.push(data);
+
+    }
+
+
+    $('#ResultTable').DataTable({
+        data: dataSet,
+    });
+
+</script>

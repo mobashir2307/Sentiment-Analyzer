@@ -1,0 +1,96 @@
+﻿@model SentimentAnalyzer.Models.TestingParameters
+
+@{
+    ViewBag.Title = "Test";
+}
+
+<h2>Test Classifiers</h2>
+
+@using (Html.BeginForm("Test", "Evaluation", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.TestingFile, "Testing File", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextBoxFor(model => model.TestingFile, new { type = "file", name = "TestingFile", id = "TestingFile",@class="btn btn-default",required="required" })
+                <p>Please enter a CSV file in format: "TweetID,Sentiment,Text"</p>
+                <p><font color="#b30000">@ViewBag.fileErrMsg</font></p>
+            </div>
+        </div>
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        
+        <div class="form-group">
+            @Html.LabelFor(model => model.classifiers, "Select Classifiers", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @{
+                for (int i = 0; i < Model.classifiers.Count; i++)
+                {
+
+                    <div>
+                        @Html.CheckBoxFor(m => m.selected[i])
+                        @Html.LabelFor(model => model.selected[i], Model.classifiers[i])
+
+
+                    </div>
+
+                }
+                }
+                <p><font color="#b30000">@ViewBag.classifierErr</font></p>
+                </div>
+            
+            </div>
+        <div class="form-group" style="display:none">
+            @Html.LabelFor(model => model.classifiers, "Select Classifiers", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @{
+                    for (int i = 0; i < Model.classifiers.Count; i++)
+                    {
+
+                        <div>
+                            @Html.TextBoxFor(m => m.classifiers[i])
+                            @Html.LabelFor(model => model.classifiers[i], Model.classifiers[i])
+
+
+                        </div>
+
+                    }
+                }
+            </div>
+        </div>
+        <div class="form-group" style="display:none">
+            @Html.LabelFor(model => model.ClassifierType, "Select Classifiers", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @{
+                for (int i = 0; i < Model.classifiers.Count; i++)
+                {
+
+                    <div>
+                        @Html.TextBoxFor(m => m.ClassifierType[i])
+                        @Html.LabelFor(model => model.ClassifierType[i], Model.classifiers[i])
+
+
+                    </div>
+
+                }
+                }
+            </div>
+        </div>
+
+
+
+
+        
+
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Analyze" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+}
+
+

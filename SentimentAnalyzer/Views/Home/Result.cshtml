@@ -1,0 +1,38 @@
+﻿@model SentimentAnalyzer.Models.TweetModel[]
+
+@{
+    ViewBag.Title = "Result";
+}
+
+<h2>Result</h2>
+<h4 style="color:green">Positive Tweets: @ViewBag.positivePercentage%</h4>
+<h4 style="color:red">Negative Tweets: @ViewBag.negativePercentage%</h4>
+<table id="ResultTable" class="display cell-border compact stripe">
+    <thead>
+        <tr>
+            <th>Tweet</th>
+            <th>Sentiment</th>
+        </tr>
+    </thead>
+    <tbody></tbody>
+</table>
+<script>
+    var tweets = @Html.Raw(Json.Encode(Model))
+    console.log(tweets);
+    var dataSet = [];
+    for(var i=0;i<tweets.length;i++)
+    {
+        var data = [];
+        data.push(tweets[i].TweetText);
+        data.push(tweets[i].TweetSentiment);
+        dataSet.push(data);
+
+    }
+
+
+    $('#ResultTable').DataTable({
+        data:dataSet,
+    });
+
+</script>
+
